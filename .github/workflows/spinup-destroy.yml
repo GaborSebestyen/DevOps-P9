@@ -34,7 +34,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v1
         with:
-          creds: ${{ sercrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Create the Azure resource group with predefinied environment and saved credential
       - name: Create Azure resource group
