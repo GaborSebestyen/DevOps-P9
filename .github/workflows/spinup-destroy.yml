@@ -11,7 +11,8 @@ on:
 env:
   AZURE_RESOURCE_GROUP: cd-with-actions
   AZURE_APP_PLAN: actions-ttt_deployment
-  AZURE_LOCATION: docmilo-ttt-app
+  AZURE_LOCATION: '"North Europe"'
+  AZURE_WEBAPP_NAME: docmilo-ttt-app
 
 # Describing jobs
 jobs:
@@ -27,7 +28,7 @@ jobs:
     steps:
       # Checks-out repository under $GITHUB_WORKSPACE, so the job can access it
       - name: Checkout repository 
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       # Login to Azure with received and saved credentials
       - name: Azure login
