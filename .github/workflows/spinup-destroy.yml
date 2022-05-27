@@ -73,7 +73,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      # Login to Azure with received and saved credentials
+      # Login to Azure with received and saved credentials.
       - name: Azure login
         uses: azure/login@v1
         with:
