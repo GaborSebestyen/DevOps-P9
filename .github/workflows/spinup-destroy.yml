@@ -1,7 +1,7 @@
 # This is a basic workflow for Azure deployment
 name: Configure Azure environment
 
-# Controls when the workflow will run.
+# Controls when the workflow will run
 on:
   # Triggers the workflow on pull request events but only for the appropritely labelled ones
   pull_request:
