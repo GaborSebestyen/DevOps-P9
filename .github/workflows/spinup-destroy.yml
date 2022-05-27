@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     
     # Validation point for steps when label destroy environment is present
-    if: contains(github.event.pull_request.*.name, 'destroy environment')
+    if: contains(github.event.pull_request.labels.*.name, 'destroy environment')
     
     # Steps if the above check is true
     steps:
