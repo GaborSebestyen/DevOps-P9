@@ -12,7 +12,7 @@ env:
   AZURE_RESOURCE_GROUP: cd-with-actions
   AZURE_APP_PLAN: actions-ttt_deployment
   AZURE_LOCATION: '"North Europe"'
-  AZURE_WEBAPP_NAME: docmilo-ttt-app
+  AZURE_WEBAPP_NAME: gaborsebestyen-ttt-app
 
 # Describing jobs
 jobs:
