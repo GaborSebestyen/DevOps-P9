@@ -9,9 +9,9 @@ on:
 
 # Setting up Azure environments
 env:
-  AZURE_RESOURCE_GROUP: cd-with-actions
+  AZURE_RESOURCE_GROUP: cdci-with-actions
   AZURE_APP_PLAN: actions-ttt-deployment
-  AZURE_LOCATION: '"North Europe"'
+  AZURE_LOCATION: '"Central US"'
   AZURE_WEBAPP_NAME: gaborsebestyen-ttt-app
 
 # Describing jobs
@@ -20,9 +20,6 @@ jobs:
   setup-up-azure-resources:
     # Latest Ubuntu runner that the job will run on
     runs-on: ubuntu-latest
-    
-    # Validation point for steps when label spin up environment is present
-    if: contains(github.event.pull_request.labels.*.name, 'spin up environment')
 
     # Steps if the above check is true
     steps:
@@ -52,13 +49,13 @@ jobs:
       - name: Create webapp resource
         if: success()
         run: |
-          az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --plan ${{env.AZURE_APP_PLAN}} --name ${{env.AZURE_WEBAPP_NAME}} --deployment-container-image-name nginx --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+          az webapp create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --plan ${{env.AZURE_APP_PLAN}} --name ${{env.AZURE_WEBAPP_NAME}} --deployment-container-image-name nginx --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
       
       # Configuring the app to use the GitHub packages
       - name: Config webapp to use GitHub Packages
         if: success()
         run: |
-          az webapp config container set --docker-custom-image-name nginx --docker-registry-server-password ${{secrets.REGISTRY_PASSWORD}} --docker-registry-server-url https://docker.pkg.github.com --docker-registry-server-user gaborsebestyen --name ${{env.AZURE_WEBAPP_NAME}} --resource-group ${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}} 
+          az webapp config container set --docker-custom-image-name nginx --docker-registry-server-password ${{secrets.REGISTRY_PASSWORD}} --docker-registry-server-url https://docker.pkg.github.com --docker-registry-server-user ${{github.actor}} --name ${{env.AZURE_WEBAPP_NAME}} --resource-group ${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}} 
        
   # Job to setup Azure resources
   destroy-azure-resources:
