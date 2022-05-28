@@ -8,9 +8,9 @@ on:
   
 # Setting up Azure environments
 env:
-  AZURE_RESOURCE_GROUP: ci-with-actions
+  AZURE_RESOURCE_GROUP: cdci-with-actions
   AZURE_APP_PLAN: actions-ttt-deployment
-  AZURE_LOCATION: '"West Europe"'
+  AZURE_LOCATION: '"Central US"'
   AZURE_WEBAPP_NAME: gaborsebestyen-ttt-app
 
 # Describing jobs
