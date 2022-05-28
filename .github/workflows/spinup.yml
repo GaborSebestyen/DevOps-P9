@@ -1,0 +1,58 @@
+# This is a basic workflow for Azure deployment
+name: Spin up Azure environment
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow manually
+  workflow_dispatch:
+  
+# Setting up Azure environments
+env:
+  AZURE_RESOURCE_GROUP: cd-with-actions
+  AZURE_APP_PLAN: actions-ttt-deployment
+  AZURE_LOCATION: '"North Europe"'
+  AZURE_WEBAPP_NAME: gaborsebestyen-ttt-app
+
+# Describing jobs
+jobs:
+  # Job to setup Azure resources
+  setup-up-azure-resources:
+    # Latest Ubuntu runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps if the above check is true
+    steps:
+      # Checks-out repository under $GITHUB_WORKSPACE, so the job can access it
+      - name: Checkout repository 
+        uses: actions/checkout@v2
+
+      # Login to Azure with received and saved credentials
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Create the Azure resource group with predefinied environment and saved credential
+      - name: Create Azure resource group
+        if: success()
+        run: |
+          az group create --location ${{env.AZURE_LOCATION}} --name ${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+    
+      # Creating an app service for our app with the resource group it will belong to
+      - name: Create Azure app service plan
+        if: success()
+        run: |
+          az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --name ${{env.AZURE_APP_PLAN}} --is-linux --sku F1 --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+          
+      # Creating the resource for the webapp
+      - name: Create webapp resource
+        if: success()
+        run: |
+          az appservice plan create --resource-group ${{env.AZURE_RESOURCE_GROUP}} --plan ${{env.AZURE_APP_PLAN}} --name ${{env.AZURE_WEBAPP_NAME}} --deployment-container-image-name nginx --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}}
+      
+      # Configuring the app to use the GitHub packages
+      - name: Config webapp to use GitHub Packages
+        if: success()
+        run: |
+          az webapp config container set --docker-custom-image-name nginx --docker-registry-server-password ${{secrets.REGISTRY_PASSWORD}} --docker-registry-server-url https://docker.pkg.github.com --docker-registry-server-user gaborsebestyen --name ${{env.AZURE_WEBAPP_NAME}} --resource-group ${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}} 
+ 
