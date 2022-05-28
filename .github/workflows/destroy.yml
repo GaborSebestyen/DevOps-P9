@@ -1,0 +1,35 @@
+# This is a basic workflow for Azure deployment
+name: Destroy Azure environment
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on pull request events but only for the appropritely labelled ones
+  workflow_dispatch:
+
+# Setting up Azure environments
+env:
+  AZURE_RESOURCE_GROUP: cd-with-actions
+
+# Describing jobs
+jobs:
+  # Job to setup Azure resources
+  destroy-azure-resources:
+    runs-on: ubuntu-latest
+    
+    # Steps 
+    steps:
+      # Checks-out repository under $GITHUB_WORKSPACE, so the job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      # Login to Azure with received and saved credentials.
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURE_CREDENTIALS}}
+          
+      # Tear down/ Destroy Azure environment
+      - name: Destroy Azure environment
+        if: success()
+        run: |
+          az group delete --name ${{env.AZURE_RESOURCE_GROUP}} --subscription ${{secrets.AZURE_SUBSCRIPTION_ID}} --yes
