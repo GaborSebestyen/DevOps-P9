@@ -8,7 +8,7 @@ on:
 
 # Setting up Azure environments
 env:
-  AZURE_RESOURCE_GROUP: cd-with-actions
+  AZURE_RESOURCE_GROUP: cdci-with-actions
 
 # Describing jobs
 jobs:
