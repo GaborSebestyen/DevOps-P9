@@ -1,10 +1,9 @@
 name: Docker Image CI
 
+# Controls when the workflow will run
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # Triggers the workflow on pull request events but only for the appropritely labelled ones
+  workflow_dispatch:
 
 jobs:
 
